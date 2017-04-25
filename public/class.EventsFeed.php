@@ -1,11 +1,5 @@
 <?php
 
-// methods for getting and listing events
-$config = require_once('../config.php');
-
-// connect to db
-$connection = mysqli_connect($config->host, $config->username, $config->pass, $config->database);
-
 /**
  * Events Feed
  *
@@ -46,8 +40,7 @@ class EventsFeed {
    *
    * Get events and output in list format
    *
-   * @param type var Description
-   * @return return type
+   * @return string $output
    */
   function get_event_list_display(){
     $events_resp = $this->get_events();
@@ -76,6 +69,29 @@ EOF;
       }
     }
 
+    return $output;
+  }
+
+  /**
+   * EventsFeed::get_event_sign_up_display()
+   *
+   * Output sign up listing for events
+   *
+   * @return $output
+   */
+  public function get_event_sign_up_display(){
+    $events_resp = $this->get_events();
+    $output = "";
+
+    while($row = mysqli_fetch_array($events_resp)){
+      $id = $row['id'];
+      $title = $row['title'];
+
+      $output .= <<<EOF
+      <p class='event_title'>$title <input id='$id' type='checkbox'  class='checkbox' name='add[]' value='$id'/><label for='$id'/></label></p>
+EOF;
+
+    }
     return $output;
   }
 }
