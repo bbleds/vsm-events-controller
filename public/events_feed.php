@@ -35,7 +35,7 @@ class EventsFeed {
   function get_events(){
     // get all current events
     $event_table = $this->config->event_table;
-    $query = "SELECT * FROM  $event_table";
+    $query = "SELECT * FROM  $event_table WHERE `date` > NOW() ORDER BY `date` ASC";
     $result = mysqli_query($this->connection, $query);
 
     return $result;
@@ -79,8 +79,5 @@ EOF;
     return $output;
   }
 }
-
-$events = new EventsFeed($config);
-print($events->get_event_list_display());
 
 ?>
