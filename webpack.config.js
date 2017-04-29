@@ -11,9 +11,6 @@ module.exports = {
   // takes an extensions array - this is a list of extensions that we want to process
   resolve:{
     root: __dirname,
-    alias:{
-      Main: 'app/components/Main.jsx'
-    },
     extensions: ['', '.js', '.jsx']
   },
   // specify our loaders
