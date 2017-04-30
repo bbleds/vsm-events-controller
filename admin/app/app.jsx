@@ -20,7 +20,7 @@ ReactDOM.render(
     <Router history={hashHistory}>
       <Route path="/" component={Main}>
         <IndexRoute component={Events}/>
-        <Route path="add" component={EventForm}/>
+        <Route path="edit(/:id)" component={EventForm}/>
         <Route path="sign-ups" component={SignUps}/>
       </Route>
     </Router>

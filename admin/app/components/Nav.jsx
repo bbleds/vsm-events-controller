@@ -9,7 +9,7 @@ const Nav = React.createClass({
     return (
     <nav>
       <IndexLink to='/' >Current Events</IndexLink>
-      <IndexLink to='/add' >Add Events</IndexLink>
+      <IndexLink to='/edit' >Add Events</IndexLink>
       <IndexLink to='/sign-ups'>Sign Ups</IndexLink>
     </nav>
     );

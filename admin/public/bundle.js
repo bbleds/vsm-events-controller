@@ -52,7 +52,7 @@
 
 	// require custom components
 	var Main = __webpack_require__(222);
-	var EventForm = __webpack_require__(223);
+	var EventForm = __webpack_require__(224);
 	var SignUps = __webpack_require__(225);
 	var Events = __webpack_require__(226);
 
@@ -79,7 +79,7 @@
 	      Route,
 	      { path: '/', component: Main },
 	      React.createElement(IndexRoute, { component: Events }),
-	      React.createElement(Route, { path: 'add', component: EventForm }),
+	      React.createElement(Route, { path: 'edit(/:id)', component: EventForm }),
 	      React.createElement(Route, { path: 'sign-ups', component: SignUps })
 	    )
 	  )
@@ -25446,7 +25446,7 @@
 	var React = __webpack_require__(1);
 
 	// require custom components
-	var Nav = __webpack_require__(224);
+	var Nav = __webpack_require__(223);
 
 	var Main = React.createClass({
 	  displayName: 'Main',
@@ -25466,51 +25466,6 @@
 
 /***/ }),
 /* 223 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	var React = __webpack_require__(1);
-
-	var CrudEventForm = React.createClass({
-	  displayName: 'CrudEventForm',
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      location: '',
-	      date: '',
-	      time: '',
-	      fee: ''
-	    };
-	  },
-	  // change handler for form inputs
-	  handleChange: function handleChange(event) {
-	    var value = event.target.value;
-	    var name = event.target.name;
-
-	    this.setState(_defineProperty({}, name, value));
-	  },
-	  // form submit handler
-	  onFormSubmit: function onFormSubmit(e) {
-	    e.preventDefault();
-	  },
-	  // render this to DOM
-	  render: function render() {
-	    return React.createElement(
-	      'form',
-	      null,
-	      React.createElement('input', { type: 'text', name: 'location', placeholder: 'Location' }),
-	      React.createElement('input', { type: 'text', name: 'date', placeholder: 'Location' })
-	    );
-	  }
-	});
-
-	module.exports = CrudEventForm;
-
-/***/ }),
-/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25536,7 +25491,7 @@
 	      ),
 	      React.createElement(
 	        IndexLink,
-	        { to: '/add' },
+	        { to: '/edit' },
 	        'Add Events'
 	      ),
 	      React.createElement(
@@ -25549,6 +25504,65 @@
 	});
 
 	module.exports = Nav;
+
+/***/ }),
+/* 224 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var React = __webpack_require__(1);
+
+	var CrudEventForm = React.createClass({
+	  displayName: 'CrudEventForm',
+
+	  getInitialState: function getInitialState() {
+	    // grab id passed in
+	    var id = this.props.params.id;
+
+	    return {
+	      location: '',
+	      date: '',
+	      time: '',
+	      fee: ''
+	    };
+	  },
+	  // change handler for form inputs
+	  handleChange: function handleChange(event) {
+	    var value = event.target.value;
+	    var name = event.target.name;
+
+	    this.setState(_defineProperty({}, name, value));
+	  },
+	  // form submit handler
+	  onFormSubmit: function onFormSubmit(e) {
+	    e.preventDefault();
+
+	    // format values
+
+	    // pass to api from parent method
+	  },
+	  // render this to DOM
+	  render: function render() {
+	    return React.createElement(
+	      'form',
+	      null,
+	      React.createElement('input', { type: 'text', name: 'location', placeholder: 'Location', value: this.state.location, onChange: this.handleChange }),
+	      React.createElement('input', { type: 'text', name: 'date', placeholder: 'Date', value: this.state.date, onChange: this.handleChange }),
+	      React.createElement('input', { type: 'text', name: 'time', placeholder: 'time', value: this.state.time, onChange: this.handleChange }),
+	      React.createElement('input', { type: 'text', name: 'fee', placeholder: 'Fee', value: this.state.fee, onChange: this.handleChange }),
+	      React.createElement(
+	        'button',
+	        { type: 'submit' },
+	        'Save'
+	      )
+	    );
+	  }
+	});
+
+	module.exports = CrudEventForm;
 
 /***/ }),
 /* 225 */
