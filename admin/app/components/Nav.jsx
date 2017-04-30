@@ -8,8 +8,9 @@ const Nav = React.createClass({
   render: function(){
     return (
     <nav>
-      <IndexLink to='/' activeClassName="active" activeStyle={{fontWeight:'bold'}}>Add Event</IndexLink>
-      <IndexLink to='/sign-ups' activeClassName="active"  activeStyle={{fontWeight:'bold'}}>Sign Ups</IndexLink>
+      <IndexLink to='/' >Current Events</IndexLink>
+      <IndexLink to='/add' >Add Events</IndexLink>
+      <IndexLink to='/sign-ups'>Sign Ups</IndexLink>
     </nav>
     );
   }

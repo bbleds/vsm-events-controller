@@ -11,6 +11,7 @@ const CrudEventForm = React.createClass({
         fee: ''
       }
   },
+  // change handler for form inputs
   handleChange: function(event){
     let value = event.target.value;
     let name = event.target.name;
@@ -19,20 +20,18 @@ const CrudEventForm = React.createClass({
       [name]: value
     });
   },
+  // form submit handler
   onFormSubmit: (e)=>{
     e.preventDefault();
   },
   // render this to DOM
   render: function(){
     return (
-    <form method="POST" onSubmit={this.onFormSubmit}>
-      <input type="text" name="location" placeholder="Location" value={this.state.location} onChange={this.handleChange}/>
-      <input type="text" name="date" placeholder="Date" value={this.state.date} onChange={this.handleChange} />
-      <input type="text" name="time" placeholder="Time" value={this.state.time} onChange={this.handleChange} />
-      <input type="text" name="fee" placeholder="Fee" value={this.state.fee} onChange={this.handleChange} />
-      <button type="submit">Save</button>
-    </form>
-    );
+      <form>
+          <input type="text" name="location" placeholder="Location" />
+          <input type="text" name="date" placeholder="Location" />
+      </form>
+      );
   }
 });
 

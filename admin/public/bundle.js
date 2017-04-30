@@ -52,8 +52,9 @@
 
 	// require custom components
 	var Main = __webpack_require__(222);
-	var Form = __webpack_require__(223);
+	var EventForm = __webpack_require__(223);
 	var SignUps = __webpack_require__(225);
+	var Events = __webpack_require__(226);
 
 	// get our react router dependencies, and use destructuring
 
@@ -77,7 +78,8 @@
 	    React.createElement(
 	      Route,
 	      { path: '/', component: Main },
-	      React.createElement(IndexRoute, { component: Form }),
+	      React.createElement(IndexRoute, { component: Events }),
+	      React.createElement(Route, { path: 'add', component: EventForm }),
 	      React.createElement(Route, { path: 'sign-ups', component: SignUps })
 	    )
 	  )
@@ -25483,12 +25485,14 @@
 	      fee: ''
 	    };
 	  },
+	  // change handler for form inputs
 	  handleChange: function handleChange(event) {
 	    var value = event.target.value;
 	    var name = event.target.name;
 
 	    this.setState(_defineProperty({}, name, value));
 	  },
+	  // form submit handler
 	  onFormSubmit: function onFormSubmit(e) {
 	    e.preventDefault();
 	  },
@@ -25496,16 +25500,9 @@
 	  render: function render() {
 	    return React.createElement(
 	      'form',
-	      { method: 'POST', onSubmit: this.onFormSubmit },
-	      React.createElement('input', { type: 'text', name: 'location', placeholder: 'Location', value: this.state.location, onChange: this.handleChange }),
-	      React.createElement('input', { type: 'text', name: 'date', placeholder: 'Date', value: this.state.date, onChange: this.handleChange }),
-	      React.createElement('input', { type: 'text', name: 'time', placeholder: 'Time', value: this.state.time, onChange: this.handleChange }),
-	      React.createElement('input', { type: 'text', name: 'fee', placeholder: 'Fee', value: this.state.fee, onChange: this.handleChange }),
-	      React.createElement(
-	        'button',
-	        { type: 'submit' },
-	        'Save'
-	      )
+	      null,
+	      React.createElement('input', { type: 'text', name: 'location', placeholder: 'Location' }),
+	      React.createElement('input', { type: 'text', name: 'date', placeholder: 'Location' })
 	    );
 	  }
 	});
@@ -25534,12 +25531,17 @@
 	      null,
 	      React.createElement(
 	        IndexLink,
-	        { to: '/', activeClassName: 'active', activeStyle: { fontWeight: 'bold' } },
-	        'Add Event'
+	        { to: '/' },
+	        'Current Events'
 	      ),
 	      React.createElement(
 	        IndexLink,
-	        { to: '/sign-ups', activeClassName: 'active', activeStyle: { fontWeight: 'bold' } },
+	        { to: '/add' },
+	        'Add Events'
+	      ),
+	      React.createElement(
+	        IndexLink,
+	        { to: '/sign-ups' },
 	        'Sign Ups'
 	      )
 	    );
@@ -25574,6 +25576,33 @@
 	});
 
 	module.exports = SignUpList;
+
+/***/ }),
+/* 226 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var Events = React.createClass({
+	  displayName: 'Events',
+
+	  // render this to DOM
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Event list should display here'
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Events;
 
 /***/ })
 /******/ ]);

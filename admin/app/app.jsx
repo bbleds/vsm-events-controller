@@ -6,8 +6,9 @@ const ReactRouter = require('react-router');
 
 // require custom components
 const Main = require('./components/Main.jsx');
-const Form = require('./components/CrudEvents.jsx');
+const EventForm = require('./components/CrudEvents.jsx');
 const SignUps = require('./components/Signups.jsx');
+const Events = require('./components/Events.jsx');
 
 // get our react router dependencies, and use destructuring
 const {Route, Router, IndexRoute, hashHistory} = require('react-router');
@@ -18,7 +19,8 @@ ReactDOM.render(
   <div>
     <Router history={hashHistory}>
       <Route path="/" component={Main}>
-        <IndexRoute component={Form}/>
+        <IndexRoute component={Events}/>
+        <Route path="add" component={EventForm}/>
         <Route path="sign-ups" component={SignUps}/>
       </Route>
     </Router>
