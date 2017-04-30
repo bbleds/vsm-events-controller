@@ -1,6 +1,7 @@
 'use strict';
 
 const React = require('react');
+const {Link, IndexLink} = require('react-router');
 
 // requre custom components
 const eventsApi = require('./eventsApi.jsx');
@@ -34,9 +35,14 @@ const Events = React.createClass({
 
       // build event list ul
       eventItems =  this.state.events.map((item)=>{
+        let id = item.id;
+        let editRoute = `/edit/${id}`;
         return (
-          <li key={item.id}>
+          <li key={id}>
             {item.title}
+            <IndexLink to={editRoute} >
+              <button>Edit</button>
+            </IndexLink>
           </li>
         )
       });

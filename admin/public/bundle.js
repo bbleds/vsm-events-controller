@@ -25599,7 +25599,13 @@
 
 	var React = __webpack_require__(1);
 
+	var _require = __webpack_require__(159),
+	    Link = _require.Link,
+	    IndexLink = _require.IndexLink;
+
 	// requre custom components
+
+
 	var eventsApi = __webpack_require__(227);
 
 	// admin event listing component
@@ -25632,10 +25638,21 @@
 
 	      // build event list ul
 	      eventItems = this.state.events.map(function (item) {
+	        var id = item.id;
+	        var editRoute = '/edit/' + id;
 	        return React.createElement(
 	          'li',
-	          { key: item.id },
-	          item.title
+	          { key: id },
+	          item.title,
+	          React.createElement(
+	            IndexLink,
+	            { to: editRoute },
+	            React.createElement(
+	              'button',
+	              null,
+	              'Edit'
+	            )
+	          )
 	        );
 	      });
 	    }
