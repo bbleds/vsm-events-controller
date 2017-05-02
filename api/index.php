@@ -26,5 +26,5 @@ if(!method_exists($api, $action)){
 }
 
 // call method
-$api->$action();
+$api->$action($_POST);
 ?>

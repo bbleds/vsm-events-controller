@@ -5,7 +5,7 @@
 const axios = require('axios');
 //const api_key = process.env.OPEN_WEATHER_API_KEY;
 const eventsUrl = 'http://visionstudentministries.org/api/';
-const api_key = 'jsismybae81761';
+const api_key = '';
 
 module.exports = {
   getEvents: function(){
@@ -19,18 +19,22 @@ module.exports = {
       throw new Error(errResp);
     });
   },
-  addEvent: function(){
+  addEvent: function(data){
     let requestUrl = `${eventsUrl}`;
-    var params = new URLSearchParams();
-    params.append('action', 'add-event');
-    params.append('apikey', '');
+    let queryString = `action=add-event&apikey=${api_key}`;
+    // build query string to pass from data passed in
+    for(let key in data){
+      let value = data[key];
+      queryString+=`&${key}=${value}`;
+    }
+
     return axios({
       method: 'post',
       url:requestUrl,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      data: params
+      data: queryString
     })
     .then(function(data){
       console.log('data is', data);

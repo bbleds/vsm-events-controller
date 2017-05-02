@@ -25543,10 +25543,27 @@
 	  onFormSubmit: function onFormSubmit(e) {
 	    e.preventDefault();
 
-	    // format values
-	    console.log('calling method from crud events');
+	    var requiredFields = ['location', 'date'];
+	    var error = false;
+
+	    // be sure we have a value for the required fields
+	    for (var i = 0; i < requiredFields.length; i++) {
+	      var currentField = requiredFields[i];
+	      if (this.refs[currentField].value == '') {
+	        error = true;
+	      }
+	    }
+
+	    // get and format values
+	    var postData = {
+	      location: this.refs.location.value,
+	      date: this.refs.date.value,
+	      time: this.refs.time.value,
+	      fee: this.refs.fee.value
+	    };
+
 	    // pass to api from parent method
-	    eventsApi.addEvent().then(function (data) {
+	    eventsApi.addEvent(postData).then(function (data) {
 	      console.log(data);
 	    });
 	  },
@@ -25555,10 +25572,10 @@
 	    return React.createElement(
 	      'form',
 	      { method: 'POST', onSubmit: this.onFormSubmit },
-	      React.createElement('input', { type: 'text', name: 'location', placeholder: 'Location', value: this.state.location, onChange: this.handleChange }),
-	      React.createElement('input', { type: 'text', name: 'date', placeholder: 'Date', value: this.state.date, onChange: this.handleChange }),
-	      React.createElement('input', { type: 'text', name: 'time', placeholder: 'time', value: this.state.time, onChange: this.handleChange }),
-	      React.createElement('input', { type: 'text', name: 'fee', placeholder: 'Fee', value: this.state.fee, onChange: this.handleChange }),
+	      React.createElement('input', { type: 'text', name: 'location', ref: 'location', placeholder: 'Location', value: this.state.location, onChange: this.handleChange }),
+	      React.createElement('input', { type: 'text', name: 'date', ref: 'date', placeholder: 'Date', value: this.state.date, onChange: this.handleChange }),
+	      React.createElement('input', { type: 'text', name: 'time', ref: 'time', placeholder: 'time', value: this.state.time, onChange: this.handleChange }),
+	      React.createElement('input', { type: 'text', name: 'fee', ref: 'fee', placeholder: 'Fee', value: this.state.fee, onChange: this.handleChange }),
 	      React.createElement(
 	        'button',
 	        { type: 'submit' },
@@ -25693,7 +25710,7 @@
 	var axios = __webpack_require__(228);
 	//const api_key = process.env.OPEN_WEATHER_API_KEY;
 	var eventsUrl = 'http://visionstudentministries.org/api/';
-	var api_key = 'jsismybae81761';
+	var api_key = '';
 
 	module.exports = {
 	  getEvents: function getEvents() {
@@ -25706,18 +25723,22 @@
 	      throw new Error(errResp);
 	    });
 	  },
-	  addEvent: function addEvent() {
+	  addEvent: function addEvent(data) {
 	    var requestUrl = '' + eventsUrl;
-	    var params = new URLSearchParams();
-	    params.append('action', 'add-event');
-	    params.append('apikey', '');
+	    var queryString = 'action=add-event&apikey=' + api_key;
+	    // build query string to pass from data passed in
+	    for (var key in data) {
+	      var value = data[key];
+	      queryString += '&' + key + '=' + value;
+	    }
+
 	    return axios({
 	      method: 'post',
 	      url: requestUrl,
 	      headers: {
 	        'Content-Type': 'application/x-www-form-urlencoded'
 	      },
-	      data: params
+	      data: queryString
 	    }).then(function (data) {
 	      console.log('data is', data);
 	      return data;

@@ -52,7 +52,7 @@ class EventsAPI {
    * @param array $data
    * @return string $output
    */
-  public function add_event($data){
+  public function add_event($data=array()){
     $required_fields = array('title', 'date');
     $api_key = $this->config->apikey;
 
@@ -60,6 +60,7 @@ class EventsAPI {
     $output = array();
     $output['success'] = 1;
     $output['error'] = 0;
+    $output['data-is'] = $data;
 
     return print(json_encode($output));
   }

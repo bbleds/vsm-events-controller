@@ -27,13 +27,30 @@ const CrudEventForm = React.createClass({
     });
   },
   // form submit handler
-  onFormSubmit: (e)=>{
+  onFormSubmit: function(e){
     e.preventDefault();
 
-    // format values
-console.log('calling method from crud events');
+    let requiredFields = ['location', 'date'];
+    let error = false;
+
+    // be sure we have a value for the required fields
+    for(let i =0;i<requiredFields.length;i++){
+      let currentField = requiredFields[i];
+      if(this.refs[currentField].value == ''){
+        error = true;
+      }
+    }
+
+    // get and format values
+    let postData = {
+      location: this.refs.location.value,
+      date: this.refs.date.value,
+      time: this.refs.time.value,
+      fee: this.refs.fee.value
+    }
+
     // pass to api from parent method
-    eventsApi.addEvent()
+    eventsApi.addEvent(postData)
     .then(function(data){
       console.log(data);
     });
@@ -42,10 +59,10 @@ console.log('calling method from crud events');
   render: function(){
     return (
       <form method="POST" onSubmit={this.onFormSubmit}>
-          <input type="text" name="location" placeholder="Location" value={this.state.location} onChange={this.handleChange}/>
-          <input type="text" name="date" placeholder="Date" value={this.state.date} onChange={this.handleChange}/>
-          <input type="text" name="time" placeholder="time" value={this.state.time} onChange={this.handleChange}/>
-          <input type="text" name="fee" placeholder="Fee" value={this.state.fee} onChange={this.handleChange}/>
+          <input type="text" name="location" ref="location" placeholder="Location" value={this.state.location} onChange={this.handleChange}/>
+          <input type="text" name="date" ref="date" placeholder="Date" value={this.state.date} onChange={this.handleChange}/>
+          <input type="text" name="time" ref="time" placeholder="time" value={this.state.time} onChange={this.handleChange}/>
+          <input type="text" name="fee" ref="fee" placeholder="Fee" value={this.state.fee} onChange={this.handleChange}/>
           <button type="submit">Save</button>
       </form>
       );
