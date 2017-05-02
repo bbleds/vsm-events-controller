@@ -3,7 +3,7 @@
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
-header("Access-Control-Allow-Headers: X-Requested-With");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
 class EventsAPI {
   /**
@@ -40,6 +40,26 @@ class EventsAPI {
     while($row = mysqli_fetch_assoc($result)){
       $output[] = $row;
     }
+
+    return print(json_encode($output));
+  }
+
+  /**
+   * EventsAPI::add_event()
+   *
+   * Allows adding new event to current events
+   *
+   * @param array $data
+   * @return string $output
+   */
+  public function add_event($data){
+    $required_fields = array('title', 'date');
+    $api_key = $this->config->apikey;
+
+
+    $output = array();
+    $output['success'] = 1;
+    $output['error'] = 0;
 
     return print(json_encode($output));
   }

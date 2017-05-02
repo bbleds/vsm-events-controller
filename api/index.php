@@ -12,6 +12,15 @@ $api = new EventsAPI($config);
 // replace dash characters with underscores
 $action =  preg_replace('/(-)/', '_', $action);
 
+print(json_encode($_POST));
+
+// check api key if post
+if($_POST){
+  if($_POST['apikey'] !== $config->apikey){
+    return print($_POST['apikey']);
+  }
+}
+
 // check if api method exists
 if(!method_exists($api, $action)){
   return print(json_encode($error));
@@ -19,5 +28,4 @@ if(!method_exists($api, $action)){
 
 // call method
 $api->$action();
-
 ?>

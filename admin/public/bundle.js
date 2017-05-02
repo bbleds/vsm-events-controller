@@ -25515,6 +25515,9 @@
 
 	var React = __webpack_require__(1);
 
+	// requre custom components
+	var eventsApi = __webpack_require__(227);
+
 	var CrudEventForm = React.createClass({
 	  displayName: 'CrudEventForm',
 
@@ -25541,14 +25544,17 @@
 	    e.preventDefault();
 
 	    // format values
-
+	    console.log('calling method from crud events');
 	    // pass to api from parent method
+	    eventsApi.addEvent().then(function (data) {
+	      console.log(data);
+	    });
 	  },
 	  // render this to DOM
 	  render: function render() {
 	    return React.createElement(
 	      'form',
-	      null,
+	      { method: 'POST', onSubmit: this.onFormSubmit },
 	      React.createElement('input', { type: 'text', name: 'location', placeholder: 'Location', value: this.state.location, onChange: this.handleChange }),
 	      React.createElement('input', { type: 'text', name: 'date', placeholder: 'Date', value: this.state.date, onChange: this.handleChange }),
 	      React.createElement('input', { type: 'text', name: 'time', placeholder: 'time', value: this.state.time, onChange: this.handleChange }),
@@ -25687,6 +25693,7 @@
 	var axios = __webpack_require__(228);
 	//const api_key = process.env.OPEN_WEATHER_API_KEY;
 	var eventsUrl = 'http://visionstudentministries.org/api/';
+	var api_key = 'jsismybae81761';
 
 	module.exports = {
 	  getEvents: function getEvents() {
@@ -25696,7 +25703,26 @@
 	      console.log('data is', data);
 	      return data.data;
 	    }, function (errResp) {
-	      throw new Error(errResp.data.message);
+	      throw new Error(errResp);
+	    });
+	  },
+	  addEvent: function addEvent() {
+	    var requestUrl = '' + eventsUrl;
+	    var params = new URLSearchParams();
+	    params.append('action', 'add-event');
+	    params.append('apikey', '');
+	    return axios({
+	      method: 'post',
+	      url: requestUrl,
+	      headers: {
+	        'Content-Type': 'application/x-www-form-urlencoded'
+	      },
+	      data: params
+	    }).then(function (data) {
+	      console.log('data is', data);
+	      return data;
+	    }, function (errResp) {
+	      throw new Error(errResp);
 	    });
 	  }
 	};

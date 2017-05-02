@@ -2,6 +2,9 @@
 
 const React = require('react');
 
+// requre custom components
+const eventsApi = require('./eventsApi.jsx');
+
 const CrudEventForm = React.createClass({
   getInitialState: function(){
     // grab id passed in
@@ -28,13 +31,17 @@ const CrudEventForm = React.createClass({
     e.preventDefault();
 
     // format values
-
+console.log('calling method from crud events');
     // pass to api from parent method
+    eventsApi.addEvent()
+    .then(function(data){
+      console.log(data);
+    });
   },
   // render this to DOM
   render: function(){
     return (
-      <form>
+      <form method="POST" onSubmit={this.onFormSubmit}>
           <input type="text" name="location" placeholder="Location" value={this.state.location} onChange={this.handleChange}/>
           <input type="text" name="date" placeholder="Date" value={this.state.date} onChange={this.handleChange}/>
           <input type="text" name="time" placeholder="time" value={this.state.time} onChange={this.handleChange}/>
