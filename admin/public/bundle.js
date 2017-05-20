@@ -53,8 +53,8 @@
 	// require custom components
 	var Main = __webpack_require__(222);
 	var EventForm = __webpack_require__(224);
-	var SignUps = __webpack_require__(225);
-	var Events = __webpack_require__(226);
+	var SignUps = __webpack_require__(255);
+	var Events = __webpack_require__(256);
 
 	// get our react router dependencies, and use destructuring
 
@@ -25516,7 +25516,7 @@
 	var React = __webpack_require__(1);
 
 	// requre custom components
-	var eventsApi = __webpack_require__(227);
+	var eventsApi = __webpack_require__(225);
 
 	var CrudEventForm = React.createClass({
 	  displayName: 'CrudEventForm',
@@ -25556,6 +25556,7 @@
 
 	    // get and format values
 	    var postData = {
+	      title: this.refs.location.value,
 	      location: this.refs.location.value,
 	      date: this.refs.date.value,
 	      time: this.refs.time.value,
@@ -25572,6 +25573,7 @@
 	    return React.createElement(
 	      'form',
 	      { method: 'POST', onSubmit: this.onFormSubmit },
+	      React.createElement('input', { type: 'text', name: 'title', ref: 'title', placeholder: 'Tite', value: this.state.title, onChange: this.handleChange }),
 	      React.createElement('input', { type: 'text', name: 'location', ref: 'location', placeholder: 'Location', value: this.state.location, onChange: this.handleChange }),
 	      React.createElement('input', { type: 'text', name: 'date', ref: 'date', placeholder: 'Date', value: this.state.date, onChange: this.handleChange }),
 	      React.createElement('input', { type: 'text', name: 'time', ref: 'time', placeholder: 'time', value: this.state.time, onChange: this.handleChange }),
@@ -25591,128 +25593,17 @@
 /* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var SignUpList = React.createClass({
-	  displayName: 'SignUpList',
-
-	  // render this to DOM
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        null,
-	        'Sign ups should display here'
-	      )
-	    );
-	  }
-	});
-
-	module.exports = SignUpList;
-
-/***/ }),
-/* 226 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(1);
-
-	var _require = __webpack_require__(159),
-	    Link = _require.Link,
-	    IndexLink = _require.IndexLink;
-
-	// requre custom components
-
-
-	var eventsApi = __webpack_require__(227);
-
-	// admin event listing component
-	var Events = React.createClass({
-	  displayName: 'Events',
-
-	  getInitialState: function getInitialState() {
-	    var that = this;
-
-	    // get events from api
-	    var events = eventsApi.getEvents().then(function (data) {
-	      console.log('setting state data');
-	      that.setState({
-	        events: data,
-	        isLoading: false
-	      });
-	    });
-
-	    return {
-	      isLoading: true
-	    };
-	  },
-	  // render this to DOM
-	  render: function render() {
-	    // msg to send to user informing them of status
-	    var statusMsg = this.state.isLoading ? 'Event List loading' : 'Got events';
-	    var eventItems = '';
-
-	    if (this.state.events) {
-
-	      // build event list ul
-	      eventItems = this.state.events.map(function (item) {
-	        var id = item.id;
-	        var editRoute = '/edit/' + id;
-	        return React.createElement(
-	          'li',
-	          { key: id },
-	          item.title,
-	          React.createElement(
-	            IndexLink,
-	            { to: editRoute },
-	            React.createElement(
-	              'button',
-	              null,
-	              'Edit'
-	            )
-	          )
-	        );
-	      });
-	    }
-
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h3',
-	        null,
-	        statusMsg
-	      ),
-	      React.createElement(
-	        'ul',
-	        null,
-	        eventItems
-	      )
-	    );
-	  }
-	});
-
-	module.exports = Events;
-
-/***/ }),
-/* 227 */
-/***/ (function(module, exports, __webpack_require__) {
-
 	"use strict";
 
 	// methods for interacting with api endpoint
 
-	var axios = __webpack_require__(228);
+	var axios = __webpack_require__(226);
 	//const api_key = process.env.OPEN_WEATHER_API_KEY;
 	var eventsUrl = 'http://visionstudentministries.org/api/';
 	var api_key = '';
 
 	module.exports = {
+	  // gets a list of current events
 	  getEvents: function getEvents() {
 	    // url encode our location
 	    var requestUrl = eventsUrl + '?action=events-list';
@@ -25723,6 +25614,7 @@
 	      throw new Error(errResp);
 	    });
 	  },
+	  // adds an event to the database
 	  addEvent: function addEvent(data) {
 	    var requestUrl = '' + eventsUrl;
 	    var queryString = 'action=add-event&apikey=' + api_key;
@@ -25732,6 +25624,7 @@
 	      queryString += '&' + key + '=' + value;
 	    }
 
+	    // post data to API endpoint
 	    return axios({
 	      method: 'post',
 	      url: requestUrl,
@@ -25749,21 +25642,21 @@
 	};
 
 /***/ }),
-/* 228 */
+/* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(229);
+	module.exports = __webpack_require__(227);
 
 /***/ }),
-/* 229 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(230);
-	var bind = __webpack_require__(235);
-	var Axios = __webpack_require__(236);
-	var defaults = __webpack_require__(237);
+	var utils = __webpack_require__(228);
+	var bind = __webpack_require__(233);
+	var Axios = __webpack_require__(234);
+	var defaults = __webpack_require__(235);
 
 	/**
 	 * Create an instance of Axios
@@ -25796,15 +25689,15 @@
 	};
 
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(254);
-	axios.CancelToken = __webpack_require__(255);
-	axios.isCancel = __webpack_require__(251);
+	axios.Cancel = __webpack_require__(252);
+	axios.CancelToken = __webpack_require__(253);
+	axios.isCancel = __webpack_require__(249);
 
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(256);
+	axios.spread = __webpack_require__(254);
 
 	module.exports = axios;
 
@@ -25813,12 +25706,12 @@
 
 
 /***/ }),
-/* 230 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 
-	var bind = __webpack_require__(235);
+	var bind = __webpack_require__(233);
 
 	/*global toString:true*/
 
@@ -26129,10 +26022,10 @@
 	  trim: trim
 	};
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(231).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(229).Buffer))
 
 /***/ }),
-/* 231 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -26145,9 +26038,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(232)
-	var ieee754 = __webpack_require__(233)
-	var isArray = __webpack_require__(234)
+	var base64 = __webpack_require__(230)
+	var ieee754 = __webpack_require__(231)
+	var isArray = __webpack_require__(232)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -27928,7 +27821,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }),
-/* 232 */
+/* 230 */
 /***/ (function(module, exports) {
 
 	'use strict'
@@ -28048,7 +27941,7 @@
 
 
 /***/ }),
-/* 233 */
+/* 231 */
 /***/ (function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -28138,7 +28031,7 @@
 
 
 /***/ }),
-/* 234 */
+/* 232 */
 /***/ (function(module, exports) {
 
 	var toString = {}.toString;
@@ -28149,7 +28042,7 @@
 
 
 /***/ }),
-/* 235 */
+/* 233 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -28166,17 +28059,17 @@
 
 
 /***/ }),
-/* 236 */
+/* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(237);
-	var utils = __webpack_require__(230);
-	var InterceptorManager = __webpack_require__(248);
-	var dispatchRequest = __webpack_require__(249);
-	var isAbsoluteURL = __webpack_require__(252);
-	var combineURLs = __webpack_require__(253);
+	var defaults = __webpack_require__(235);
+	var utils = __webpack_require__(228);
+	var InterceptorManager = __webpack_require__(246);
+	var dispatchRequest = __webpack_require__(247);
+	var isAbsoluteURL = __webpack_require__(250);
+	var combineURLs = __webpack_require__(251);
 
 	/**
 	 * Create a new instance of Axios
@@ -28257,13 +28150,13 @@
 
 
 /***/ }),
-/* 237 */
+/* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(230);
-	var normalizeHeaderName = __webpack_require__(238);
+	var utils = __webpack_require__(228);
+	var normalizeHeaderName = __webpack_require__(236);
 
 	var DEFAULT_CONTENT_TYPE = {
 	  'Content-Type': 'application/x-www-form-urlencoded'
@@ -28279,10 +28172,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(239);
+	    adapter = __webpack_require__(237);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(239);
+	    adapter = __webpack_require__(237);
 	  }
 	  return adapter;
 	}
@@ -28356,12 +28249,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 238 */
+/* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(230);
+	var utils = __webpack_require__(228);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -28374,18 +28267,18 @@
 
 
 /***/ }),
-/* 239 */
+/* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(230);
-	var settle = __webpack_require__(240);
-	var buildURL = __webpack_require__(243);
-	var parseHeaders = __webpack_require__(244);
-	var isURLSameOrigin = __webpack_require__(245);
-	var createError = __webpack_require__(241);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(246);
+	var utils = __webpack_require__(228);
+	var settle = __webpack_require__(238);
+	var buildURL = __webpack_require__(241);
+	var parseHeaders = __webpack_require__(242);
+	var isURLSameOrigin = __webpack_require__(243);
+	var createError = __webpack_require__(239);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(244);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -28481,7 +28374,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(247);
+	      var cookies = __webpack_require__(245);
 
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -28560,12 +28453,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 240 */
+/* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(241);
+	var createError = __webpack_require__(239);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -28591,12 +28484,12 @@
 
 
 /***/ }),
-/* 241 */
+/* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(242);
+	var enhanceError = __webpack_require__(240);
 
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -28614,7 +28507,7 @@
 
 
 /***/ }),
-/* 242 */
+/* 240 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -28639,12 +28532,12 @@
 
 
 /***/ }),
-/* 243 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(230);
+	var utils = __webpack_require__(228);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -28713,12 +28606,12 @@
 
 
 /***/ }),
-/* 244 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(230);
+	var utils = __webpack_require__(228);
 
 	/**
 	 * Parse headers into an object
@@ -28756,12 +28649,12 @@
 
 
 /***/ }),
-/* 245 */
+/* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(230);
+	var utils = __webpack_require__(228);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -28830,7 +28723,7 @@
 
 
 /***/ }),
-/* 246 */
+/* 244 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -28872,12 +28765,12 @@
 
 
 /***/ }),
-/* 247 */
+/* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(230);
+	var utils = __webpack_require__(228);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -28931,12 +28824,12 @@
 
 
 /***/ }),
-/* 248 */
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(230);
+	var utils = __webpack_require__(228);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -28989,15 +28882,15 @@
 
 
 /***/ }),
-/* 249 */
+/* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(230);
-	var transformData = __webpack_require__(250);
-	var isCancel = __webpack_require__(251);
-	var defaults = __webpack_require__(237);
+	var utils = __webpack_require__(228);
+	var transformData = __webpack_require__(248);
+	var isCancel = __webpack_require__(249);
+	var defaults = __webpack_require__(235);
 
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -29074,12 +28967,12 @@
 
 
 /***/ }),
-/* 250 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(230);
+	var utils = __webpack_require__(228);
 
 	/**
 	 * Transform the data for a request or a response
@@ -29100,7 +28993,7 @@
 
 
 /***/ }),
-/* 251 */
+/* 249 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -29111,7 +29004,7 @@
 
 
 /***/ }),
-/* 252 */
+/* 250 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -29131,7 +29024,7 @@
 
 
 /***/ }),
-/* 253 */
+/* 251 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -29151,7 +29044,7 @@
 
 
 /***/ }),
-/* 254 */
+/* 252 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -29176,12 +29069,12 @@
 
 
 /***/ }),
-/* 255 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Cancel = __webpack_require__(254);
+	var Cancel = __webpack_require__(252);
 
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -29239,7 +29132,7 @@
 
 
 /***/ }),
-/* 256 */
+/* 254 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -29270,6 +29163,118 @@
 	  };
 	};
 
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var SignUpList = React.createClass({
+	  displayName: 'SignUpList',
+
+	  // render this to DOM
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Sign ups should display here'
+	      )
+	    );
+	  }
+	});
+
+	module.exports = SignUpList;
+
+/***/ }),
+/* 256 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var _require = __webpack_require__(159),
+	    Link = _require.Link,
+	    IndexLink = _require.IndexLink;
+
+	// requre custom components
+
+
+	var eventsApi = __webpack_require__(225);
+
+	// admin event listing component
+	var Events = React.createClass({
+	  displayName: 'Events',
+
+	  getInitialState: function getInitialState() {
+	    var that = this;
+
+	    // get events from api
+	    var events = eventsApi.getEvents().then(function (data) {
+	      console.log('setting state data');
+	      that.setState({
+	        events: data,
+	        isLoading: false
+	      });
+	    });
+
+	    return {
+	      isLoading: true
+	    };
+	  },
+	  // render this to DOM
+	  render: function render() {
+	    // msg to send to user informing them of status
+	    var statusMsg = this.state.isLoading ? 'Event List loading' : 'Got events';
+	    var eventItems = '';
+
+	    if (this.state.events) {
+
+	      // build event list ul
+	      eventItems = this.state.events.map(function (item) {
+	        var id = item.id;
+	        var editRoute = '/edit/' + id;
+	        return React.createElement(
+	          'li',
+	          { key: id },
+	          item.title,
+	          React.createElement(
+	            IndexLink,
+	            { to: editRoute },
+	            React.createElement(
+	              'button',
+	              null,
+	              'Edit'
+	            )
+	          )
+	        );
+	      });
+	    }
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h3',
+	        null,
+	        statusMsg
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        eventItems
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Events;
 
 /***/ })
 /******/ ]);

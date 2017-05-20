@@ -8,6 +8,7 @@ const eventsUrl = 'http://visionstudentministries.org/api/';
 const api_key = '';
 
 module.exports = {
+  // gets a list of current events
   getEvents: function(){
     // url encode our location
     let requestUrl = `${eventsUrl}?action=events-list`;
@@ -19,6 +20,7 @@ module.exports = {
       throw new Error(errResp);
     });
   },
+  // adds an event to the database
   addEvent: function(data){
     let requestUrl = `${eventsUrl}`;
     let queryString = `action=add-event&apikey=${api_key}`;
@@ -28,6 +30,7 @@ module.exports = {
       queryString+=`&${key}=${value}`;
     }
 
+    // post data to API endpoint
     return axios({
       method: 'post',
       url:requestUrl,

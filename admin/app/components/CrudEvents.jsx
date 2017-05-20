@@ -43,6 +43,7 @@ const CrudEventForm = React.createClass({
 
     // get and format values
     let postData = {
+      title: this.refs.location.value,
       location: this.refs.location.value,
       date: this.refs.date.value,
       time: this.refs.time.value,
@@ -59,6 +60,7 @@ const CrudEventForm = React.createClass({
   render: function(){
     return (
       <form method="POST" onSubmit={this.onFormSubmit}>
+          <input type="text" name="title" ref="title" placeholder="Tite" value={this.state.title} onChange={this.handleChange}/>
           <input type="text" name="location" ref="location" placeholder="Location" value={this.state.location} onChange={this.handleChange}/>
           <input type="text" name="date" ref="date" placeholder="Date" value={this.state.date} onChange={this.handleChange}/>
           <input type="text" name="time" ref="time" placeholder="time" value={this.state.time} onChange={this.handleChange}/>

@@ -53,14 +53,52 @@ class EventsAPI {
    * @return string $output
    */
   public function add_event($data=array()){
-    $required_fields = array('title', 'date');
+    // set defaults
+    $required_fields = array('title', 'location', 'date', 'time', 'fee');
+    $escaped_values = array();
     $api_key = $this->config->apikey;
-
-
     $output = array();
-    $output['success'] = 1;
+    $post_api_key = $data['apikey'];
+    $post_data_valid = true;
+
+    // Be sure we have valid api key
+    if($post_api_key !== $api_key){
+      $output = array('error'=>1,'msg'=>'Invalid api key.');
+      return print(json_encode($output));
+    }
+
+    // // validate required fields
+    foreach($required_fields as $field){
+      // if field has no value, fail validation
+      if(!isset($data[$field]) || empty($data[$field])){
+        $post_data_valid = false;
+      }
+    }
+
+    // If we failed validation, return early
+    if(!$post_data_valid){
+      $output = array('error'=>1,'msg'=>'Missing required fields.');
+      return print(json_encode($output));
+    }
+
+    // get and escape data from post
+    foreach($required_fields as $field){
+      $escaped_values[] = mysqli_real_escape_string($this->connection, $data[$field]);
+    }
+
+    // insert record
+    $event_table = $this->config->event_table;
+    $values = "'".join("','", $escaped_values)."'";
+    $query = "INSERT INTO $event_table (title, location, date, time, fee)
+              VALUES ($values)";
+    $result = mysqli_query($this->connection, $query);
+    $output['result_error'] = mysqli_error($this->connection);
+
     $output['error'] = 0;
-    $output['data-is'] = $data;
+    $output['query_that_ran'] = $query;
+    $output['add_event_methodhasbeencalled'] = 0;
+    $output['data'] = $data;
+    $output['api_key_that_was_pasesed'] = $data['apikey'];
 
     return print(json_encode($output));
   }
