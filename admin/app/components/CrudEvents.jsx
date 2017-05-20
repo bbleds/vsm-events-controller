@@ -11,10 +11,12 @@ const CrudEventForm = React.createClass({
     let id = this.props.params.id;
 
     return {
+      title: '',
       location: '',
       date: '',
       time: '',
-      fee: ''
+      fee: '',
+      id : id
     }
   },
   // change handler for form inputs
@@ -43,24 +45,35 @@ const CrudEventForm = React.createClass({
 
     // get and format values
     let postData = {
-      title: this.refs.location.value,
+      title: this.refs.title.value,
       location: this.refs.location.value,
       date: this.refs.date.value,
       time: this.refs.time.value,
       fee: this.refs.fee.value
     }
 
-    // pass to api from parent method
-    eventsApi.addEvent(postData)
-    .then(function(data){
-      console.log(data);
-    });
+    // if this is an existing event, pass to update method
+    if(this.state.id){
+      postData.eventid = this.state.id;
+      eventsApi.updateEvent(postData)
+      .then(function(data){
+        alert('Event updated successfully!');
+      })
+
+    } else {
+      // default to adding new event
+      eventsApi.addEvent(postData)
+      .then(function(data){
+        alert('Event added successfully!');
+        console.log(data);
+      });
+    }
   },
   // render this to DOM
   render: function(){
     return (
       <form method="POST" onSubmit={this.onFormSubmit}>
-          <input type="text" name="title" ref="title" placeholder="Tite" value={this.state.title} onChange={this.handleChange}/>
+          <input type="text" name="title" ref="title" placeholder="Title" value={this.state.title} onChange={this.handleChange}/>
           <input type="text" name="location" ref="location" placeholder="Location" value={this.state.location} onChange={this.handleChange}/>
           <input type="text" name="date" ref="date" placeholder="Date" value={this.state.date} onChange={this.handleChange}/>
           <input type="text" name="time" ref="time" placeholder="time" value={this.state.time} onChange={this.handleChange}/>

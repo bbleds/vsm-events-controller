@@ -25526,10 +25526,12 @@
 	    var id = this.props.params.id;
 
 	    return {
+	      title: '',
 	      location: '',
 	      date: '',
 	      time: '',
-	      fee: ''
+	      fee: '',
+	      id: id
 	    };
 	  },
 	  // change handler for form inputs
@@ -25556,24 +25558,33 @@
 
 	    // get and format values
 	    var postData = {
-	      title: this.refs.location.value,
+	      title: this.refs.title.value,
 	      location: this.refs.location.value,
 	      date: this.refs.date.value,
 	      time: this.refs.time.value,
 	      fee: this.refs.fee.value
 	    };
 
-	    // pass to api from parent method
-	    eventsApi.addEvent(postData).then(function (data) {
-	      console.log(data);
-	    });
+	    // if this is an existing event, pass to update method
+	    if (this.state.id) {
+	      postData.eventid = this.state.id;
+	      eventsApi.updateEvent(postData).then(function (data) {
+	        alert('Event updated successfully!');
+	      });
+	    } else {
+	      // default to adding new event
+	      eventsApi.addEvent(postData).then(function (data) {
+	        alert('Event added successfully!');
+	        console.log(data);
+	      });
+	    }
 	  },
 	  // render this to DOM
 	  render: function render() {
 	    return React.createElement(
 	      'form',
 	      { method: 'POST', onSubmit: this.onFormSubmit },
-	      React.createElement('input', { type: 'text', name: 'title', ref: 'title', placeholder: 'Tite', value: this.state.title, onChange: this.handleChange }),
+	      React.createElement('input', { type: 'text', name: 'title', ref: 'title', placeholder: 'Title', value: this.state.title, onChange: this.handleChange }),
 	      React.createElement('input', { type: 'text', name: 'location', ref: 'location', placeholder: 'Location', value: this.state.location, onChange: this.handleChange }),
 	      React.createElement('input', { type: 'text', name: 'date', ref: 'date', placeholder: 'Date', value: this.state.date, onChange: this.handleChange }),
 	      React.createElement('input', { type: 'text', name: 'time', ref: 'time', placeholder: 'time', value: this.state.time, onChange: this.handleChange }),
@@ -25634,6 +25645,32 @@
 	      data: queryString
 	    }).then(function (data) {
 	      console.log('data is', data);
+	      return data;
+	    }, function (errResp) {
+	      throw new Error(errResp);
+	    });
+	  },
+	  // updates an existing event in db
+	  updateEvent: function updateEvent(data) {
+	    var requestUrl = '' + eventsUrl;
+	    var queryString = 'action=update-event&apikey=' + api_key;
+
+	    // build query string to pass from data passed in
+	    for (var key in data) {
+	      var value = data[key];
+	      queryString += '&' + key + '=' + value;
+	    }
+
+	    // post data to API endpoint
+	    return axios({
+	      method: 'post',
+	      url: requestUrl,
+	      headers: {
+	        'Content-Type': 'application/x-www-form-urlencoded'
+	      },
+	      data: queryString
+	    }).then(function (data) {
+	      console.log('data from update is', data);
 	      return data;
 	    }, function (errResp) {
 	      throw new Error(errResp);

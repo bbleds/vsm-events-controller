@@ -45,5 +45,32 @@ module.exports = {
     }, function(errResp){
       throw new Error(errResp);
     })
+  },
+  // updates an existing event in db
+  updateEvent: function(data){
+    let requestUrl = `${eventsUrl}`;
+    let queryString = `action=update-event&apikey=${api_key}`;
+
+    // build query string to pass from data passed in
+    for(let key in data){
+      let value = data[key];
+      queryString+=`&${key}=${value}`;
+    }
+
+    // post data to API endpoint
+    return axios({
+      method: 'post',
+      url:requestUrl,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data: queryString
+    })
+    .then(function(data){
+      console.log('data from update is', data);
+      return data;
+    }, function(errResp){
+      throw new Error(errResp);
+    })
   }
 }
