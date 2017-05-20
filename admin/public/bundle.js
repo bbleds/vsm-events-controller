@@ -25522,8 +25522,23 @@
 	  displayName: 'CrudEventForm',
 
 	  getInitialState: function getInitialState() {
+	    var _this = this;
+
 	    // grab id passed in
 	    var id = this.props.params.id;
+
+	    if (id) {
+	      eventsApi.getEvents(id).then(function (data) {
+	        _this.setState({
+	          title: data['0'].title,
+	          location: data['0'].location,
+	          date: data['0'].date,
+	          time: data['0'].time,
+	          fee: data['0'].fee,
+	          id: id
+	        });
+	      });
+	    }
 
 	    return {
 	      title: '',
@@ -25614,12 +25629,20 @@
 	var api_key = '';
 
 	module.exports = {
-	  // gets a list of current events
-	  getEvents: function getEvents() {
+	  // gets a list of current events or a single event
+	  getEvents: function getEvents($eventId) {
 	    // url encode our location
-	    var requestUrl = eventsUrl + '?action=events-list';
-	    return axios.get(requestUrl).then(function (data) {
-	      console.log('data is', data);
+	    var requestUrl = eventsUrl + '?';
+	    var queryString = 'action=events-list&apikey=' + api_key + '&eventid=' + $eventId;
+
+	    return axios({
+	      method: 'post',
+	      url: requestUrl,
+	      headers: {
+	        'Content-Type': 'application/x-www-form-urlencoded'
+	      },
+	      data: queryString
+	    }).then(function (data) {
 	      return data.data;
 	    }, function (errResp) {
 	      throw new Error(errResp);
@@ -29254,6 +29277,7 @@
 
 	    // get events from api
 	    var events = eventsApi.getEvents().then(function (data) {
+	      console.log('got data back', data);
 	      console.log('setting state data');
 	      that.setState({
 	        events: data,

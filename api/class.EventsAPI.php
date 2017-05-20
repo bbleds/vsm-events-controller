@@ -20,19 +20,23 @@ class EventsAPI {
   /**
    * EventsAPI::events_list
    *
-   * returns json data feed for all available events
+   * returns json data feed for all available events or a single event by id
    *
    */
-  public function events_list(){
+  public function events_list($data=array()){
+
     // get all current events
     $event_table = $this->config->event_table;
-    $query = "SELECT * FROM  $event_table WHERE `date` > NOW() ORDER BY `date` ASC";
+    // if we have an id, we should append a where clause to query
+    $where = isset($data['eventid']) && !empty($data['eventid']) && $data['eventid'] !== 'undefined' ? 'AND id='.$data['eventid'] : "";
+    $query = "SELECT * FROM  $event_table WHERE `date` > NOW() $where ORDER BY `date` ASC";
     $result = mysqli_query($this->connection, $query);
     $output = array();
 
     if(!$result){
       $output['msg'] = 'No events found';
       $output['error'] = 1;
+      $output['data'] = $data;
       return print(json_encode($output));
     }
 

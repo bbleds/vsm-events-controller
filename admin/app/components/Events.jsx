@@ -14,6 +14,7 @@ const Events = React.createClass({
     // get events from api
     let events = eventsApi.getEvents()
     .then((data)=>{
+      console.log('got data back', data);
       console.log('setting state data');
       that.setState({
         events : data,

@@ -8,13 +8,21 @@ const eventsUrl = 'http://visionstudentministries.org/api/';
 const api_key = '';
 
 module.exports = {
-  // gets a list of current events
-  getEvents: function(){
+  // gets a list of current events or a single event
+  getEvents: function($eventId){
     // url encode our location
-    let requestUrl = `${eventsUrl}?action=events-list`;
-    return axios.get(requestUrl)
+    let requestUrl = `${eventsUrl}?`;
+    let queryString = `action=events-list&apikey=${api_key}&eventid=${$eventId}`;
+
+    return axios({
+      method: 'post',
+      url:requestUrl,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data: queryString
+    })
     .then(function(data){
-      console.log('data is', data);
       return data.data;
     }, function(errResp){
       throw new Error(errResp);

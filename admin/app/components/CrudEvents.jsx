@@ -10,6 +10,20 @@ const CrudEventForm = React.createClass({
     // grab id passed in
     let id = this.props.params.id;
 
+    if(id){
+      eventsApi.getEvents(id)
+      .then((data)=>{
+        this.setState({
+          title: data['0'].title,
+          location: data['0'].location,
+          date: data['0'].date,
+          time: data['0'].time,
+          fee: data['0'].fee,
+          id : id
+        });
+      });
+    }
+
     return {
       title: '',
       location: '',
