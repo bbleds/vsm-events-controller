@@ -4,3 +4,4 @@ public/sign_up_origin.php
 public/sign_up.php
 config.php
 node_modules
+admin/public/bundle.js
