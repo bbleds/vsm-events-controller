@@ -13,6 +13,10 @@ const Events = require('./components/Events.jsx');
 // get our react router dependencies, and use destructuring
 const {Route, Router, IndexRoute, hashHistory} = require('react-router');
 
+// kick off foundation and require our styles
+require('style!css!foundation-sites/dist/foundation.min.css');
+$(document).foundation();
+
 // kickoff react app
 ReactDOM.render(
   // pass jsx
