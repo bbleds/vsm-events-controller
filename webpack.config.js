@@ -1,6 +1,24 @@
+"use strict";
+
+const webpack = require('webpack');
+
 module.exports = {
   // tells wp where to start processing code
-  entry: './admin/app/app.jsx',
+  entry: [
+    'script!jquery/dist/jquery.min.js',
+    'script!foundation-sites/dist/foundation.min.js',
+    './admin/app/app.jsx',
+  ],
+  // this will be for reference within foundation
+  externals: {
+    jquery: 'jQuery'
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      '$': 'jquery',
+      'jQuery' : 'jquery'
+    })
+  ],
   // tells wp where to put output
   output: {
     // path to folder -- __dirname is a node variable for current directory
