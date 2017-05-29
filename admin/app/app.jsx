@@ -17,6 +17,9 @@ const {Route, Router, IndexRoute, hashHistory} = require('react-router');
 require('style!css!foundation-sites/dist/foundation.min.css');
 $(document).foundation();
 
+// add our custom styles
+require('style!css!./styles/app.scss');
+
 // kickoff react app
 ReactDOM.render(
   // pass jsx
