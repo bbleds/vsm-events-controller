@@ -29,7 +29,7 @@ const Events = React.createClass({
   // render this to DOM
   render: function(){
     // msg to send to user informing them of status
-    let statusMsg = this.state.isLoading ? 'Event List loading' : 'Got events';
+    let statusMsg = this.state.isLoading ? 'Event List loading' : 'Current Events';
     let eventItems ='';
 
     if(this.state.events){
@@ -39,20 +39,33 @@ const Events = React.createClass({
         let id = item.id;
         let editRoute = `/edit/${id}`;
         return (
-          <li key={id}>
-            {item.title}
-            <IndexLink to={editRoute} >
-              <button>Edit</button>
-            </IndexLink>
-          </li>
+          <div className="large-4 columns" key={id}>
+            <div className="card">
+              <div className="card-section card-title">
+                <h4>{item.title}</h4>
+                <hr className="small-4 colums"></hr>
+              </div>
+              <div className="card-section card-details">
+                <div className="small-12 colums"><span className="subtle-text">Location:</span> {item.location}</div>
+                <div className="small-12 colums"><span className="subtle-text">Date:</span> {item.date}</div>
+                <div className="small-12 colums"><span className="subtle-text">Time:</span> {item.time}</div>
+                <div className="small-12 colums"><span className="subtle-text">Fee:</span> {item.fee}</div>
+              </div>
+              <div className="card-section card-footer">
+                <IndexLink to={editRoute} >
+                  <button className="button radius">Edit</button>
+                </IndexLink>
+              </div>
+          </div>
+          </div>
         )
       });
     }
 
     return (
       <div>
-        <h3>{statusMsg}</h3>
-        <ul>{eventItems}</ul>
+        <div className="page-header"><h3>{statusMsg}</h3></div>
+        <div className="row expanded">{eventItems}</div>
       </div>
     );
   }

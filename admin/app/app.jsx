@@ -18,7 +18,7 @@ require('style!css!foundation-sites/dist/foundation.min.css');
 $(document).foundation();
 
 // add our custom styles
-require('style!css!./styles/app.scss');
+require('style!css!sass!./styles/app.scss');
 
 // kickoff react app
 ReactDOM.render(
