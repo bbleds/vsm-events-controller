@@ -33,6 +33,23 @@ const CrudEventForm = React.createClass({
       id : id
     }
   },
+  // called when props change
+  componentWillReceiveProps: function(nextProps){
+    // grab id passed in
+    let id = nextProps.params.id;
+
+    if(!id){
+      this.setState({
+        title: '',
+        location: '',
+        date: '',
+        time: '',
+        fee: '',
+        id : ''
+      });
+    }
+  },
+
   // change handler for form inputs
   handleChange: function(event){
     let value = event.target.value;
@@ -86,14 +103,24 @@ const CrudEventForm = React.createClass({
   // render this to DOM
   render: function(){
     return (
-      <form method="POST" onSubmit={this.onFormSubmit}>
-          <input type="text" name="title" ref="title" placeholder="Title" value={this.state.title} onChange={this.handleChange}/>
-          <input type="text" name="location" ref="location" placeholder="Location" value={this.state.location} onChange={this.handleChange}/>
-          <input type="text" name="date" ref="date" placeholder="Date" value={this.state.date} onChange={this.handleChange}/>
-          <input type="text" name="time" ref="time" placeholder="time" value={this.state.time} onChange={this.handleChange}/>
-          <input type="text" name="fee" ref="fee" placeholder="Fee" value={this.state.fee} onChange={this.handleChange}/>
-          <button type="submit">Save</button>
-      </form>
+      <div className="row">
+        <div className="large-12 columns">
+          <div className="page-header"><h3>Edit Event</h3></div>
+          <form method="POST" id="update-form" onSubmit={this.onFormSubmit}>
+              <label>Title</label>
+              <input type="text" name="title" ref="title" placeholder="Enter Title..." value={this.state.title} onChange={this.handleChange}/>
+              <label>Location</label>
+              <input type="text" name="location" ref="location" placeholder="Enter Location..." value={this.state.location} onChange={this.handleChange}/>
+              <label>Date</label>
+              <input type="text" name="date" ref="date" placeholder="Enter Date..." value={this.state.date} onChange={this.handleChange}/>
+              <label>Time</label>
+              <input type="text" name="time" ref="time" placeholder="Enter time..." value={this.state.time} onChange={this.handleChange}/>
+              <label>Fee</label>
+              <input type="text" name="fee" ref="fee" placeholder="Enter Fee..." value={this.state.fee} onChange={this.handleChange}/>
+              <button type="submit" className="button radius">Save</button>
+          </form>
+        </div>
+      </div>
       );
   }
 });
