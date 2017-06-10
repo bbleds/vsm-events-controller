@@ -5,7 +5,7 @@
 const axios = require('axios');
 //const api_key = process.env.OPEN_WEATHER_API_KEY;
 const eventsUrl = 'http://visionstudentministries.org/api/';
-const api_key = '';
+const api_key = 'jsismybae81761';
 
 module.exports = {
   // gets a list of current events or a single event
