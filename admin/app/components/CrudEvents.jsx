@@ -63,14 +63,29 @@ const CrudEventForm = React.createClass({
   onFormSubmit: function(e){
     e.preventDefault();
 
-    let requiredFields = ['location', 'date'];
+    let requiredFields = ['title','location', 'date'];
     let error = false;
+    let timestamp; // this will the be timestamp on the date submitted
 
     // be sure we have a value for the required fields
     for(let i =0;i<requiredFields.length;i++){
       let currentField = requiredFields[i];
       if(this.refs[currentField].value == ''){
-        error = true;
+        alert('Please Enter all required fields');
+        return false;
+      }
+
+      // if we are dealing with a date field, we need to validate the date
+      if(currentField == 'date'){
+        let datePassed = new Date(this.refs[currentField].value).getTime();
+        let curDate = new Date().getTime();
+
+        if(datePassed < curDate){
+          alert('Please enter a date in the future with the format: MM/DD/YYYY');
+          return false;
+        } else {
+          timestamp = datePassed;
+        }
       }
     }
 
@@ -88,6 +103,7 @@ const CrudEventForm = React.createClass({
       postData.eventid = this.state.id;
       eventsApi.updateEvent(postData)
       .then(function(data){
+        console.log(data);
         alert('Event updated successfully!');
       })
 
@@ -112,7 +128,7 @@ const CrudEventForm = React.createClass({
               <label>Location</label>
               <input type="text" name="location" ref="location" placeholder="Enter Location..." value={this.state.location} onChange={this.handleChange}/>
               <label>Date</label>
-              <input type="text" name="date" ref="date" placeholder="Enter Date..." value={this.state.date} onChange={this.handleChange}/>
+              <input className="hasDatepicker" type="text" name="date" ref="date" placeholder="MM/DD/YYYY" value={this.state.date} onChange={this.handleChange}/>
               <label>Time</label>
               <input type="text" name="time" ref="time" placeholder="Enter time..." value={this.state.time} onChange={this.handleChange}/>
               <label>Fee</label>

@@ -42,6 +42,7 @@ class EventsAPI {
 
     // build output array
     while($row = mysqli_fetch_assoc($result)){
+      $row['date'] = date("m/d/Y", strtotime($row['date']));
       $output[] = $row;
     }
 
@@ -88,6 +89,10 @@ class EventsAPI {
 
     // get and escape data from post
     foreach($required_fields as $field){
+      if($field == 'date'){
+        $timestamp = strtotime($data[$field]);
+        $data[$field] = date("Y-m-d H:i:s", $timestamp);
+      }
       $escaped_values[] = mysqli_real_escape_string($this->connection, $data[$field]);
     }
 
@@ -154,6 +159,11 @@ class EventsAPI {
 
     // get and escape data from post
     foreach($required_fields as $field){
+      if($field == 'date'){
+        $timestamp = strtotime($data[$field]);
+        $data[$field] = date("Y-m-d H:i:s", $timestamp);
+      }
+
       $escaped_values[$field] = mysqli_real_escape_string($this->connection, $data[$field]);
     }
 
