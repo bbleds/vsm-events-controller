@@ -5,3 +5,4 @@ public/sign_up.php
 config.php
 node_modules
 admin/public/bundle.js
+lib/
