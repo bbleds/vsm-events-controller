@@ -197,6 +197,66 @@ class EventsAPI {
     $output = array('data'=>$data, 'error'=>0);
     return print(json_encode($output));
   }
+
+  /**
+   * EventsAPI::add_user_to_event()
+   *
+   * Adds a sign up to an event
+   *
+   * @param array $data
+   * @return string $output
+   */
+  public function add_user_to_event($data=array()){
+    $insert_data = array();
+
+    if(!isset($data['add']) || empty($data['add'])){
+      $output = array('error'=>1,'msg'=>'No event ids were passed for sign-up insert');
+      return print(json_encode($output));
+    }
+
+  // $escaped_values[] = mysqli_real_escape_string($this->connection, $data[$field]);
+  //
+  // // insert record
+  // $event_table = $this->config->event_table;
+  // $values = "'".join("','", $escaped_values)."'";
+  // $query = "INSERT INTO $event_table (title, location, date, time, fee)
+  //           VALUES ($values)";
+  // $result = mysqli_query($this->connection, $query);
+  // $result_error = mysqli_error($this->connection);
+    $first_name = mysqli_real_escape_string($this->connection, $data['first_name']);
+    $last_name = mysqli_real_escape_string($this->connection, $data['last_name']);
+    $users_table = $this->config->users_table;
+    $sign_up_errors = array();
+
+    foreach($data['add'] as $event_id){
+
+      $check_existing_id_query = "SELECT * FROM $users_table WHERE first_name = '$first_name' AND last_name = '$last_name' AND event_id = $event_id";
+      $result = mysqli_query($this->connection, $check_existing_id_query);
+      $result_error = mysqli_error($this->connection);
+
+      if($result_error){
+        $output = array('data'=>$data, 'error'=>1, 'msg'=>'An error occurred with your request. Please try again.');
+        return print(json_encode($output));
+      } else if($result->num_rows){
+        // if there are any previous sign ups for this name and event, we dont need to add them
+        $sign_up_errors[] = $event_id;
+      } else {
+        // insert the sign up
+        $insert_query = "INSERT INTO $users_table (first_name, last_name, event_id) VALUES ('$first_name', '$last_name', $event_id)";
+        $result_error = mysqli_error($this->connection);
+
+        if($result_error){
+          $output = array('data'=>$data, 'error'=>1, 'msg'=>'An error occurred while inserting this sign up. Please try again.');
+          return print(json_encode($output));
+        } else {
+          $output = array('data'=>$data, 'error'=>0, 'msg'=>'You inserted successfully', 'query'=>$insert_query);
+          return print(json_encode($output));
+        }
+
+
+      }
+    }
+  }
 }
 
 ?>
